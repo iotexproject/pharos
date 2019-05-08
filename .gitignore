@@ -1,12 +1,38 @@
+.idea
+*.iml
+*.db
+
+.cache
+
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+# profiling output
+pprof*
+
 # Binaries for programs and plugins
 *.exe
-*.exe~
 *.dll
-*.so
 *.dylib
+*.pyc
 
 # Test binary, build with `go test -c`
 *.test
 
+#git patch
+*.patch
+
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# vendor
+vendor/*
+
+# binary
+bin/*
+**/release
+coverage.txt
+lint.log
+.editorconfig
+
