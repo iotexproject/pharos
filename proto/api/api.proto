@@ -14,10 +14,15 @@ import "proto/types/action.proto";
 import "proto/types/blockchain.proto";
 import "proto/types/node.proto";
 import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
 
 service APIService {
   // get the address detail of an address
-  rpc GetAccount(GetAccountRequest) returns (GetAccountResponse) {}
+  rpc GetAccount(GetAccountRequest) returns (GetAccountResponse) {
+    option (google.api.http) = {
+      get: "/v1/accounts/{address}"
+    };
+  }
 
   // get action(s) by:
   // 1. start index and action count
@@ -25,7 +30,22 @@ service APIService {
   // 3. address with start index and action count
   // 4. get unconfirmed actions by address with start index and action count
   // 5. block hash with start index and action count
-  rpc GetActions(GetActionsRequest) returns (GetActionsResponse) {}
+  rpc GetActions(GetActionsRequest) returns (GetActionsResponse) {
+    option (google.api.http) = {
+      post: "/v1/actions/hash"
+      body: "*"
+      additional_bindings {
+        post: "/v1/actions/addr"
+        body: "*"
+      }
+      additional_bindings {
+        get: "/v1/actions/hash/{byHash.actionHash}"
+      }
+      additional_bindings {
+        get: "/v1/actions/addr/{byAddr.address}"
+      }
+    };
+  }
 
   // get block metadata(s) by:
   // 1. start index and block count
