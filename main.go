@@ -23,6 +23,11 @@ func run() error {
 		endpoint = Endpoint
 	}
 
+	port := os.Getenv("PORT")
+	if len(port) == 0 {
+		port = "8192"
+	}
+
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
@@ -34,7 +39,7 @@ func run() error {
 		return err
 	}
 
-	return http.ListenAndServe(":8192", mux)
+	return http.ListenAndServe(":"+port, mux)
 }
 
 func main() {
