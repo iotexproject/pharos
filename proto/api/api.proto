@@ -32,18 +32,7 @@ service APIService {
   // 5. block hash with start index and action count
   rpc GetActions(GetActionsRequest) returns (GetActionsResponse) {
     option (google.api.http) = {
-      post: "/v1/actions/hash"
-      body: "*"
-      additional_bindings {
-        post: "/v1/actions/addr"
-        body: "*"
-      }
-      additional_bindings {
-        get: "/v1/actions/hash/{byHash.actionHash}"
-      }
-      additional_bindings {
-        get: "/v1/actions/addr/{byAddr.address}"
-      }
+      get: "/v1/actions/hash/{byHash.actionHash}"
     };
   }
 
@@ -59,7 +48,12 @@ service APIService {
   rpc GetServerMeta(GetServerMetaRequest) returns (GetServerMetaResponse) {}
 
   // sendAction
-  rpc SendAction(SendActionRequest) returns (SendActionResponse) {}
+  rpc SendAction(SendActionRequest) returns (SendActionResponse) {
+    option (google.api.http) = {
+      post: "/v1/actions"
+      body: "action"
+    };
+  }
 
   // get receipt by action Hash
   rpc GetReceiptByAction(GetReceiptByActionRequest) returns (GetReceiptByActionResponse) {}
@@ -81,6 +75,15 @@ service APIService {
 
   // get raw blocks data
   rpc GetRawBlocks(GetRawBlocksRequest) returns (GetRawBlocksResponse) {}
+
+  // get actions by addr
+  // this is to WA grpc-gateway cannot handle oneof message
+  // refer to https://github.com/grpc-ecosystem/grpc-gateway/issues/753
+  rpc GetActionsByAddress(GetActionsByAddressRequest) returns (GetActionsResponse) {
+    option (google.api.http) = {
+      get: "/v1/actions/addr/{address}"
+    };
+  }
 }
 
 message GetAccountRequest {
@@ -133,6 +136,7 @@ message ActionInfo {
   iotextypes.Action action = 1;
   string actHash = 2;
   string blkHash = 3;
+  uint64 blkHeight = 5;
   google.protobuf.Timestamp timestamp = 4;
 }
 
@@ -154,6 +158,7 @@ message BlockInfo {
 }
 
 message GetActionsResponse {
+  uint64 total = 2;
   repeated ActionInfo actionInfo = 1;
 }
 
@@ -174,6 +179,7 @@ message GetBlockMetaByHashRequest {
 }
 
 message GetBlockMetasResponse {
+  uint64 total = 2;
   repeated iotextypes.BlockMeta blkMetas = 1;
 }
 

@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 
-	"github.com/iotexproject/pharos/golang/iotexapi"
+	"github.com/iotexproject/iotex-proto/golang/iotexapi"
 )
 
 const Endpoint = "api.iotex.one:443"
