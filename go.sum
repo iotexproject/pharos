@@ -16,6 +16,8 @@ github.com/iotexproject/iotex-proto v0.1.1-0.20190510202205-d44d09494bcd h1:tzwt
 github.com/iotexproject/iotex-proto v0.1.1-0.20190510202205-d44d09494bcd/go.mod h1:naxLKbcF6w9zlNp9MmNel0h5CrtT1bveVtNgicuZ7qg=
 github.com/iotexproject/iotex-proto v0.1.1-0.20190512055829-507894271007 h1:qbTF5GFT6xTSjuqtPLZu/l9X2k6sZnUPUXNtXF7O1Qg=
 github.com/iotexproject/iotex-proto v0.1.1-0.20190512055829-507894271007/go.mod h1:naxLKbcF6w9zlNp9MmNel0h5CrtT1bveVtNgicuZ7qg=
+github.com/iotexproject/iotex-proto v0.2.0 h1:N8DW0d63lIsGXEexm8q+jgYElRoFR4/0FOCO/GM5Va8=
+github.com/iotexproject/iotex-proto v0.2.0/go.mod h1:naxLKbcF6w9zlNp9MmNel0h5CrtT1bveVtNgicuZ7qg=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
