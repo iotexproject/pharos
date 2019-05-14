@@ -15,17 +15,30 @@ import (
 	"github.com/iotexproject/iotex-proto/golang/iotexapi"
 )
 
-const Endpoint = "api.iotex.one:443"
+const (
+	Mainnet = "api.iotex.one:443"
+)
 
 func run() error {
-	endpoint := os.Getenv("IOTEX_MAINNET_ENDPOINT")
+	endpoint := os.Getenv("IOTEX_ENDPOINT")
 	if len(endpoint) == 0 {
-		endpoint = Endpoint
+		endpoint = Mainnet
 	}
+	glog.Warningln("======= endpoint: ", endpoint)
 
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
 		port = "8192"
+	}
+
+	var dialOption grpc.DialOption
+	enableTLS := os.Getenv("TLS_ENABLED")
+	if enableTLS == "TRUE" || enableTLS == "True" || endpoint == Mainnet {
+		dialOption = grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{}))
+		glog.Warningln("======= TLS enabled")
+	} else {
+		dialOption = grpc.WithInsecure()
+		glog.Warningln("======= TLS not enabled")
 	}
 
 	ctx := context.Background()
@@ -33,7 +46,7 @@ func run() error {
 	defer cancel()
 
 	mux := runtime.NewServeMux()
-	opts := []grpc.DialOption{grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{}))}
+	opts := []grpc.DialOption{dialOption}
 	err := iotexapi.RegisterAPIServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
 	if err != nil {
 		return err
