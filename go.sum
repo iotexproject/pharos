@@ -10,14 +10,8 @@ github.com/golang/protobuf v1.3.1 h1:YF8+flBXS5eO826T4nzqPrxfhQThhXl0YzfuUPu4SBg
 github.com/golang/protobuf v1.3.1/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/grpc-ecosystem/grpc-gateway v1.8.6 h1:XvND7+MPP7Jp+JpqSZ7naSl5nVZf6k0LbL1V3EKh0zc=
 github.com/grpc-ecosystem/grpc-gateway v1.8.6/go.mod h1:vNeuVxBJEsws4ogUvrchl83t/GYV9WGTSLVdBhOQFDY=
-github.com/iotexproject/iotex-proto v0.1.0 h1:1l6guDjkvz2Qq3FdrmXJOoXRLEc8Yv6rAyVh4P8rZFk=
-github.com/iotexproject/iotex-proto v0.1.0/go.mod h1:naxLKbcF6w9zlNp9MmNel0h5CrtT1bveVtNgicuZ7qg=
-github.com/iotexproject/iotex-proto v0.1.1-0.20190510202205-d44d09494bcd h1:tzwtDsGt/7m1AJrDimrlAiDKTt7OQUOM2vC+OYCZPOw=
-github.com/iotexproject/iotex-proto v0.1.1-0.20190510202205-d44d09494bcd/go.mod h1:naxLKbcF6w9zlNp9MmNel0h5CrtT1bveVtNgicuZ7qg=
-github.com/iotexproject/iotex-proto v0.1.1-0.20190512055829-507894271007 h1:qbTF5GFT6xTSjuqtPLZu/l9X2k6sZnUPUXNtXF7O1Qg=
-github.com/iotexproject/iotex-proto v0.1.1-0.20190512055829-507894271007/go.mod h1:naxLKbcF6w9zlNp9MmNel0h5CrtT1bveVtNgicuZ7qg=
-github.com/iotexproject/iotex-proto v0.2.0 h1:N8DW0d63lIsGXEexm8q+jgYElRoFR4/0FOCO/GM5Va8=
-github.com/iotexproject/iotex-proto v0.2.0/go.mod h1:naxLKbcF6w9zlNp9MmNel0h5CrtT1bveVtNgicuZ7qg=
+github.com/iotexproject/iotex-proto v0.2.1-0.20190517171854-6a5ec13d68ff h1:YuPfYd59AB/XAuuNe4sPnvWYtrqJvJQCIhqvOo6f6nE=
+github.com/iotexproject/iotex-proto v0.2.1-0.20190517171854-6a5ec13d68ff/go.mod h1:naxLKbcF6w9zlNp9MmNel0h5CrtT1bveVtNgicuZ7qg=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
