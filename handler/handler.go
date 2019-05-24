@@ -112,6 +112,7 @@ func GrpcToHttpHandler(fn func(*http.Request, *rpcmethod.RPCMethod) (proto.Messa
 			http.Error(w, errors.Wrap(err, ErrGrpcConnFailed).Error(), http.StatusServiceUnavailable)
 			return
 		}
+		defer svr.Close()
 
 		// execute gRPC call
 		res, err := fn(r, svr)
