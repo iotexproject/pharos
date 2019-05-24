@@ -1,66 +1,41 @@
 package main
 
 import (
-	"crypto/tls"
 	"flag"
+	"log"
 	"net/http"
 	"os"
+	"time"
 
-	"github.com/golang/glog"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"golang.org/x/net/context"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
+	"github.com/gorilla/mux"
 
-	"github.com/iotexproject/iotex-proto/golang/iotexapi"
+	"github.com/iotexproject/pharos/handler"
 )
 
-const (
-	Mainnet = "api.iotex.one:443"
-)
-
-func run() error {
-	endpoint := os.Getenv("IOTEX_ENDPOINT")
-	if len(endpoint) == 0 {
-		endpoint = Mainnet
-	}
-	glog.Warningln("======= endpoint: ", endpoint)
+func main() {
+	flag.Parse()
+	log.Println("======= starting pharos service")
 
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
 		port = "8192"
 	}
 
-	var dialOption grpc.DialOption
-	enableTLS := os.Getenv("TLS_ENABLED")
-	if enableTLS == "TRUE" || enableTLS == "True" || endpoint == Mainnet {
-		dialOption = grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{}))
-		glog.Warningln("======= TLS enabled")
-	} else {
-		dialOption = grpc.WithInsecure()
-		glog.Warningln("======= TLS not enabled")
+	r := mux.NewRouter()
+
+	account := r.PathPrefix("/v1/accounts").Subrouter()
+	account.HandleFunc("/{addr}", handler.GrpcToHttpHandler(handler.GetAccount)).Methods(http.MethodGet)
+
+	action := r.PathPrefix("/v1/actions").Subrouter()
+	action.HandleFunc("/hash/{hash}", handler.GrpcToHttpHandler(handler.GetActionByHash)).Methods(http.MethodGet)
+	action.HandleFunc("/addr/{addr}", handler.GrpcToHttpHandler(handler.GetActionByAddr)).Methods(http.MethodGet).
+		Queries("start", "{start:[0-9]+}", "count", "{count:[0-9]+}")
+
+	srv := &http.Server{
+		Handler:      r,
+		Addr:         ":" + port,
+		WriteTimeout: 5 * time.Second,
+		ReadTimeout:  25 * time.Second,
 	}
-
-	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
-
-	mux := runtime.NewServeMux()
-	opts := []grpc.DialOption{dialOption}
-	err := iotexapi.RegisterAPIServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
-	if err != nil {
-		return err
-	}
-
-	return http.ListenAndServe(":"+port, mux)
-}
-
-func main() {
-	flag.Parse()
-	glog.Infoln("======= starting pharos service")
-	defer glog.Flush()
-
-	if err := run(); err != nil {
-		glog.Fatal(err)
-	}
+	log.Fatal(srv.ListenAndServe())
 }
