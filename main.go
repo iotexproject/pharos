@@ -24,12 +24,15 @@ func main() {
 	r := mux.NewRouter()
 
 	account := r.PathPrefix("/v1/accounts").Subrouter()
-	account.HandleFunc("/{addr}", handler.GrpcToHttpHandler(handler.GetAccount)).Methods(http.MethodGet)
+	account.HandleFunc("/{addr:[0-9ac-z]{41}}", handler.GrpcToHttpHandler(handler.GetAccount)).Methods(http.MethodGet)
 
 	action := r.PathPrefix("/v1/actions").Subrouter()
-	action.HandleFunc("/hash/{hash}", handler.GrpcToHttpHandler(handler.GetActionByHash)).Methods(http.MethodGet)
-	action.HandleFunc("/addr/{addr}", handler.GrpcToHttpHandler(handler.GetActionByAddr)).Methods(http.MethodGet).
+	action.HandleFunc("/hash/{hash:[0-9a-fA-F]{64}}", handler.GrpcToHttpHandler(handler.GetActionByHash)).Methods(http.MethodGet)
+	action.HandleFunc("/addr/{addr:[0-9ac-z]{41}}", handler.GrpcToHttpHandler(handler.GetActionByAddr)).Methods(http.MethodGet).
 		Queries("start", "{start:[0-9]+}", "count", "{count:[0-9]+}")
+
+	send := r.PathPrefix("/v1").Subrouter()
+	send.HandleFunc("/actionbytes/{signedbytes:[0-9a-fA-F]+}", handler.GrpcToHttpHandler(handler.SendSignedActionBytes)).Methods(http.MethodPost)
 
 	srv := &http.Server{
 		Handler:      r,
