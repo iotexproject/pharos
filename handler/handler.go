@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/pkg/errors"
@@ -61,12 +62,21 @@ func GetActionByHash(r *http.Request, rpc *rpcmethod.RPCMethod) (proto.Message, 
 // GetActionByHash extracts address from http request, make gRPC call GetActions()
 func GetActionByAddr(r *http.Request, rpc *rpcmethod.RPCMethod) (proto.Message, error) {
 	vars := mux.Vars(r)
+	start, err := strconv.ParseInt(vars["start"], 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	count, err := strconv.ParseInt(vars["count"], 10, 64)
+	if err != nil {
+		return nil, err
+	}
+
 	req := &iotexapi.GetActionsRequest{
 		Lookup: &iotexapi.GetActionsRequest_ByAddr{
 			ByAddr: &iotexapi.GetActionsByAddressRequest{
 				Address: vars["addr"],
-				Start:   0,
-				Count:   10,
+				Start:   uint64(start),
+				Count:   uint64(count),
 			},
 		},
 	}

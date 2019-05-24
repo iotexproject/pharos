@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/iotexproject/go-pkgs/util/httputil"
 
 	"github.com/iotexproject/pharos/handler"
 )
@@ -40,5 +41,10 @@ func main() {
 		WriteTimeout: 5 * time.Second,
 		ReadTimeout:  25 * time.Second,
 	}
-	log.Fatal(srv.ListenAndServe())
+
+	ln, err := httputil.LimitListener(srv.Addr)
+	if err != nil {
+		log.Fatal("======= error creating listener: ", err.Error())
+	}
+	log.Fatal(srv.Serve(ln))
 }
