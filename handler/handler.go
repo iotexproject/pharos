@@ -7,12 +7,12 @@ import (
 	"strconv"
 
 	"github.com/golang/protobuf/jsonpb"
-	"github.com/pkg/errors"
 	"github.com/golang/protobuf/proto"
 	"github.com/gorilla/mux"
 	"github.com/iotexproject/iotex-antenna-go/rpcmethod"
 	"github.com/iotexproject/iotex-proto/golang/iotexapi"
 	"github.com/iotexproject/iotex-proto/golang/iotextypes"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -23,7 +23,7 @@ var (
 	ErrGrpcConnFailed = "failed to establish gRPC connection"
 	ErrGrpcCallFailed = "failed to execute gRPC call"
 
-	endpoint string
+	endpoint  string
 	enableTLS bool
 )
 
