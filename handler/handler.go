@@ -103,6 +103,35 @@ func SendSignedActionBytes(r *http.Request, rpc *rpcmethod.RPCMethod) (proto.Mes
 	return rpc.SendAction(req)
 }
 
+// GetTsfInBlock make gRPC call GetRawBlocks(), and returns all transfers in the block
+func GetTsfInBlock(r *http.Request, rpc *rpcmethod.RPCMethod) (proto.Message, error) {
+	vars := mux.Vars(r)
+	blk, err := strconv.ParseInt(vars["block"], 10, 64)
+	if err != nil {
+		return nil, err
+	}
+
+	req := &iotexapi.GetRawBlocksRequest{
+		StartHeight: uint64(blk),
+		Count: 1,
+		WithReceipts: false,
+	}
+	resp, err := rpc.GetRawBlocks(req)
+	if err != nil {
+		return nil, err
+	}
+
+	var tsf []*iotextypes.Action
+	for i, e := range resp.Blocks[0].Block.Body.Actions {
+		if e.Core.GetTransfer() != nil {
+			tsf = append(tsf, resp.Blocks[0].Block.Body.Actions[i])
+		}
+	}
+	resp.Blocks[0].Block.Body.Actions = nil
+	resp.Blocks[0].Block.Body.Actions = tsf
+	return resp.Blocks[0].Block.Body, nil
+}
+
 // GrpcToHttpHandler turns gRPC handler into http handler
 func GrpcToHttpHandler(fn func(*http.Request, *rpcmethod.RPCMethod) (proto.Message, error)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

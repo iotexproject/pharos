@@ -32,8 +32,11 @@ func main() {
 	action.HandleFunc("/addr/{addr:[0-9ac-z]{41}}", handler.GrpcToHttpHandler(handler.GetActionByAddr)).Methods(http.MethodGet).
 		Queries("start", "{start:[0-9]+}", "count", "{count:[0-9]+}")
 
-	send := r.PathPrefix("/v1").Subrouter()
-	send.HandleFunc("/actionbytes/{signedbytes:[0-9a-fA-F]+}", handler.GrpcToHttpHandler(handler.SendSignedActionBytes)).Methods(http.MethodPost)
+	send := r.PathPrefix("/v1/actionbytes").Subrouter()
+	send.HandleFunc("/{signedbytes:[0-9a-fA-F]+}", handler.GrpcToHttpHandler(handler.SendSignedActionBytes)).Methods(http.MethodPost)
+
+	notification := r.PathPrefix("/v1/transfers").Subrouter()
+	notification.HandleFunc("/block/{block:[0-9]+}", handler.GrpcToHttpHandler(handler.GetTsfInBlock)).Methods(http.MethodGet)
 
 	srv := &http.Server{
 		Handler:      r,
