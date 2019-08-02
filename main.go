@@ -38,6 +38,9 @@ func main() {
 	notification := r.PathPrefix("/v1/transfers").Subrouter()
 	notification.HandleFunc("/block/{block:[0-9]+}", handler.GrpcToHttpHandler(handler.GetTsfInBlock)).Methods(http.MethodGet)
 
+	meta := r.PathPrefix("/v1/chainmeta").Subrouter()
+	meta.HandleFunc("", handler.GrpcToHttpHandler(handler.GetChainMeta)).Methods(http.MethodGet)
+
 	srv := &http.Server{
 		Handler:      r,
 		Addr:         ":" + port,

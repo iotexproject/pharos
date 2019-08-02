@@ -132,6 +132,15 @@ func GetTsfInBlock(r *http.Request, rpc *rpcmethod.RPCMethod) (proto.Message, er
 	return resp.Blocks[0].Block.Body, nil
 }
 
+// GetChainMeta make gRPC call GetChainMeta(), and returns the chain meta
+func GetChainMeta(r *http.Request, rpc *rpcmethod.RPCMethod) (proto.Message, error) {
+	resp, err := rpc.GetChainMeta(&iotexapi.GetChainMetaRequest{})
+	if err != nil {
+		return nil, err
+	}
+	return resp.ChainMeta, nil
+}
+
 // GrpcToHttpHandler turns gRPC handler into http handler
 func GrpcToHttpHandler(fn func(*http.Request, *rpcmethod.RPCMethod) (proto.Message, error)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
