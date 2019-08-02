@@ -112,8 +112,8 @@ func GetTsfInBlock(r *http.Request, rpc *rpcmethod.RPCMethod) (proto.Message, er
 	}
 
 	req := &iotexapi.GetRawBlocksRequest{
-		StartHeight: uint64(blk),
-		Count: 1,
+		StartHeight:  uint64(blk),
+		Count:        1,
 		WithReceipts: false,
 	}
 	resp, err := rpc.GetRawBlocks(req)
