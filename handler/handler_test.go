@@ -59,10 +59,14 @@ func Test_Pharos(t *testing.T) {
 	require.NoError(err)
 	require.NotNil(resp.Body)
 	defer resp.Body.Close()
-	blks := &iotextypes.BlockBody{}
-	require.NoError(jsonpb.Unmarshal(resp.Body, blks))
-	require.Equal(1, len(blks.Actions))
-	require.Equal("io1e2nqsyt7fkpzs5x7zf2uk0jj72teu5n6aku3tr", blks.Actions[0].Core.GetTransfer().Recipient)
+	acts = &iotexapi.GetActionsResponse{}
+	require.NoError(jsonpb.Unmarshal(resp.Body, acts))
+	require.EqualValues(1, acts.Total)
+	actInfo = acts.ActionInfo[0]
+	require.Equal("io1e2nqsyt7fkpzs5x7zf2uk0jj72teu5n6aku3tr", actInfo.Sender)
+	require.Equal("io1e2nqsyt7fkpzs5x7zf2uk0jj72teu5n6aku3tr", actInfo.Action.Core.GetTransfer().Recipient)
+	require.Equal("fa8faa5524e5e9c7891514fbbe3c16ffd28f42bd945858533fd0b5287083faee", actInfo.ActHash)
+	require.EqualValues(222669, actInfo.BlkHeight)
 
 	resp, err = http.DefaultClient.Get(baseURL + "/chainmeta")
 	require.NoError(err)
