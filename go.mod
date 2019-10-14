@@ -10,4 +10,5 @@ require (
 	github.com/iotexproject/iotex-proto v0.2.1-0.20190718191021-4318b809f352
 	github.com/pkg/errors v0.8.1
 	github.com/stretchr/testify v1.3.0
+	google.golang.org/appengine v1.4.0 // indirect
 )
