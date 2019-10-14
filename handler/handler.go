@@ -300,6 +300,8 @@ func MemberDelegations(w http.ResponseWriter, r *http.Request) {
 					MinimumAmount: "1000000000000",
 				},
 			},
+			Value:  strconv.FormatInt(delegate.LiveVotes, 10),
+			Status: DelegationStatusActive,
 		}
 		delegationsPage = append(delegationsPage, dalegation)
 	}
