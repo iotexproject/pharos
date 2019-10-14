@@ -2,10 +2,7 @@ package handler
 
 import (
 	"encoding/hex"
-	"net/http"
-	"os"
-	"strconv"
-
+	"encoding/json"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
 	"github.com/gorilla/mux"
@@ -16,6 +13,11 @@ import (
 	"github.com/iotexproject/iotex-proto/golang/iotexapi"
 	"github.com/iotexproject/iotex-proto/golang/iotextypes"
 	"github.com/pkg/errors"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -37,7 +39,7 @@ func init() {
 	}
 
 	tls := os.Getenv("ENABLE_TLS")
-	enableTLS = (tls == "TRUE" || tls == "True" || endpoint == Mainnet)
+	enableTLS = tls == "TRUE" || tls == "True" || endpoint == Mainnet
 }
 
 // GetAccount extracts address from http request, make gRPC call GetAccount()
@@ -215,4 +217,96 @@ func convertToJSON(pb proto.Message) string {
 		return err.Error()
 	}
 	return str
+}
+
+func getMemberDelegates() (*MemberDelegates, error) {
+	resp, err := http.Post("https://member.iotex.io/api-gateway/", "application/json",
+		strings.NewReader(`{"operationName":"bpCandidates","variables":{},"query":"query bpCandidates {bpCandidates {id rank logo name status category serverStatus liveVotes liveVotesDelta percent registeredName socialMedia productivity productivityBase __typename}}"}`))
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	var memberDelegates MemberDelegates
+	err = json.Unmarshal(body, &memberDelegates)
+	return &memberDelegates, err
+}
+
+func MemberValidators(w http.ResponseWriter, r *http.Request) {
+	memberDelegates, err := getMemberDelegates()
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+	validatePage := make(ValidatorPage, 0)
+	for _, delegate := range memberDelegates.Data.BPCandidates {
+		if delegate.Status == "ELECTED" {
+			var validator = Validator{
+				ID:     delegate.ID,
+				Status: true,
+				Details: StakingDetails{
+					// TODO how to fetch data
+					Reward: StakingReward{
+						Annual: 0.0,
+					},
+					LockTime:      0,
+					MinimumAmount: "1000000000000",
+				},
+			}
+			validatePage = append(validatePage, validator)
+		}
+	}
+	body, err := json.Marshal(validatePage)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+	w.Write(body)
+}
+
+func MemberDelegations(w http.ResponseWriter, r *http.Request) {
+	memberDelegates, err := getMemberDelegates()
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+	delegationsPage := make(DelegationsPage, 0)
+	for _, delegate := range memberDelegates.Data.BPCandidates {
+		var dalegation = Delegation{
+			Delegator: StakeValidator{
+				ID:     delegate.ID,
+				Status: true,
+				Info: StakeValidatorInfo{
+					Name:        delegate.Name,
+					Description: "",
+					Image:       delegate.Logo,
+					Website: func() string {
+						if len(delegate.SocialMedia) > 0 {
+							return delegate.SocialMedia[0]
+						}
+						return ""
+					}(),
+				},
+				Details: StakingDetails{
+					// TODO how to fetch data
+					Reward: StakingReward{
+						Annual: 0.0,
+					},
+					LockTime:      0,
+					MinimumAmount: "1000000000000",
+				},
+			},
+		}
+		delegationsPage = append(delegationsPage, dalegation)
+	}
+	body, err := json.Marshal(delegationsPage)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+	w.Write(body)
 }

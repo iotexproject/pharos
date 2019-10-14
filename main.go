@@ -41,6 +41,12 @@ func main() {
 	meta := r.PathPrefix("/v1/chainmeta").Subrouter()
 	meta.HandleFunc("", handler.GrpcToHttpHandler(handler.GetChainMeta)).Methods(http.MethodGet)
 
+	validators := r.PathPrefix("/v1/validators").Subrouter()
+	validators.HandleFunc("", handler.MemberValidators).Methods(http.MethodGet)
+
+	delegations := r.PathPrefix("/v1/delegations").Subrouter()
+	delegations.HandleFunc("", handler.MemberDelegations).Methods(http.MethodGet)
+
 	srv := &http.Server{
 		Handler:      r,
 		Addr:         ":" + port,

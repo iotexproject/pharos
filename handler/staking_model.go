@@ -46,3 +46,24 @@ type StakeValidator struct {
 	Info    StakeValidatorInfo `json:"info,omitempty"`
 	Details StakingDetails     `json:"details,omitempty"`
 }
+
+type MemberDelegates struct {
+	Data struct {
+		BPCandidates []struct {
+			ID               string   `json:"id"`
+			Rand             string   `json:"rank"`
+			Logo             string   `json:"logo"`
+			Name             string   `json:"name"`
+			Status           string   `json:"status"`
+			Category         string   `json:"category"`
+			ServerStatus     string   `json:"serverStatus"`
+			LiveVotes        int64    `json:"liveVotes"`
+			LiveVotesDelta   int64    `json:"liveVotesDelta"`
+			Percent          string   `json:"percent"`
+			RegisteredName   string   `json:"registeredName"`
+			SocialMedia      []string `json:"socialMedia"`
+			Productivity     int      `json:"productivity"`
+			ProductivityBase int      `json:"productivityBase"`
+		} `json:"bpCandidates"`
+	} `json:"data"`
+}
