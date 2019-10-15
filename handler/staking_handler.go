@@ -208,6 +208,7 @@ func MemberDelegations(w http.ResponseWriter, r *http.Request) {
 					Status: DelegationStatusActive,
 				}
 				delegationsPage = append(delegationsPage, dalegation)
+				break
 			}
 		}
 	}
