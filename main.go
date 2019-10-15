@@ -45,7 +45,7 @@ func main() {
 	validators.HandleFunc("", handler.MemberValidators).Methods(http.MethodGet)
 
 	delegations := r.PathPrefix("/v1/delegations").Subrouter()
-	delegations.HandleFunc("", handler.MemberDelegations).Methods(http.MethodGet)
+	delegations.HandleFunc("/{addr:[0-9ac-z]{41}}", handler.MemberDelegations).Methods(http.MethodGet)
 
 	srv := &http.Server{
 		Handler:      r,

@@ -2,6 +2,7 @@ module github.com/iotexproject/pharos
 
 require (
 	github.com/allegro/bigcache v1.2.0 // indirect
+	github.com/ethereum/go-ethereum v1.8.27
 	github.com/golang/protobuf v1.3.1
 	github.com/gorilla/mux v1.7.2
 	github.com/iotexproject/go-pkgs v0.1.1-0.20190513193226-f065b9342b78
