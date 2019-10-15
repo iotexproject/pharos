@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"math/big"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
@@ -18,11 +19,20 @@ import (
 )
 
 const (
-	// TODO change to mainnet contract address
-	StakingContract          = "io1w97pslyg7qdayp8mfnffxkjkpapaf83wmmll2l"
 	MemberGateway            = "https://member.iotex.io/api-gateway/"
 	MemberAllCandidatesQuery = `{"operationName":"bpCandidates","variables":{},"query":"query bpCandidates {bpCandidates {id rank logo name status category serverStatus liveVotes liveVotesDelta percent registeredName socialMedia productivity productivityBase __typename}}"}`
 )
+
+var (
+	StakingContract string
+)
+
+func init() {
+	StakingContract = os.Getenv("STAKING_CONTRACT")
+	if len(StakingContract) == 0 {
+		StakingContract = "io1w97pslyg7qdayp8mfnffxkjkpapaf83wmmll2l"
+	}
+}
 
 type pygg struct {
 	CanName          [12]byte
