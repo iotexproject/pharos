@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"math/big"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
@@ -15,24 +14,13 @@ import (
 	"github.com/iotexproject/iotex-antenna-go/rpcmethod"
 	"github.com/iotexproject/iotex-proto/golang/iotexapi"
 	"github.com/iotexproject/iotex-proto/golang/iotextypes"
-	"github.com/pkg/errors"
 )
 
 const (
+	StakingContract          = "io1xpq62aw85uqzrccg9y5hnryv8ld2nkpycc3gza"
 	MemberGateway            = "https://member.iotex.io/api-gateway/"
 	MemberAllCandidatesQuery = `{"operationName":"bpCandidates","variables":{},"query":"query bpCandidates {bpCandidates {id rank logo name status category serverStatus liveVotes liveVotesDelta percent registeredName socialMedia productivity productivityBase __typename}}"}`
 )
-
-var (
-	StakingContract string
-)
-
-func init() {
-	StakingContract = os.Getenv("STAKING_CONTRACT")
-	if len(StakingContract) == 0 {
-		StakingContract = "io1w97pslyg7qdayp8mfnffxkjkpapaf83wmmll2l"
-	}
-}
 
 type pygg struct {
 	CanName          [12]byte
@@ -71,7 +59,7 @@ func MemberValidators(w http.ResponseWriter, r *http.Request) {
 	}
 	validatePage := make(ValidatorPage, 0)
 	for _, validator := range memberDelegates.Data.BPCandidates {
-		var item = Validator{
+		item := Validator{
 			ID:     validator.RegisteredName,
 			Status: true,
 			Details: StakingDetails{
@@ -119,7 +107,7 @@ func MemberDelegations(w http.ResponseWriter, r *http.Request) {
 	// connect to gRPC endpoint
 	svr, err := rpcmethod.NewRPCMethod(endpoint, enableTLS)
 	if err != nil {
-		http.Error(w, errors.Wrap(err, ErrGrpcConnFailed).Error(), http.StatusServiceUnavailable)
+		w.Write([]byte(err.Error()))
 		return
 	}
 	defer svr.Close()
@@ -180,7 +168,7 @@ func MemberDelegations(w http.ResponseWriter, r *http.Request) {
 		name := string(pygg.CanName[:])
 		for _, validator := range memberDelegates.Data.BPCandidates {
 			if name == validator.RegisteredName {
-				var dalegation = Delegation{
+				dalegation := Delegation{
 					Delegator: StakeValidator{
 						ID:     validator.RegisteredName,
 						Status: true,

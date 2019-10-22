@@ -1,14 +1,14 @@
 package handler
 
-type ValidatorPage []Validator
-type DelegationsPage []Delegation
-
-type DelegationStatus string
-
 const (
 	DelegationStatusActive  DelegationStatus = "active"
 	DelegationStatusPending DelegationStatus = "pending"
 )
+
+type ValidatorPage []Validator
+type DelegationsPage []Delegation
+
+type DelegationStatus string
 
 type StakingReward struct {
 	Annual float64 `json:"annual"`
