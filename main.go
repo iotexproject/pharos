@@ -41,6 +41,10 @@ func main() {
 	meta := r.PathPrefix("/v1/chainmeta").Subrouter()
 	meta.HandleFunc("", handler.GrpcToHttpHandler(handler.GetChainMeta)).Methods(http.MethodGet)
 
+	staking := r.PathPrefix("/v1/staking").Subrouter()
+	staking.HandleFunc("/validators", handler.MemberValidators).Methods(http.MethodGet)
+	staking.HandleFunc("/delegations/{addr:[0-9ac-z]{41}}", handler.MemberDelegations).Methods(http.MethodGet)
+
 	srv := &http.Server{
 		Handler:      r,
 		Addr:         ":" + port,
