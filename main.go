@@ -48,8 +48,8 @@ func main() {
 	srv := &http.Server{
 		Handler:      r,
 		Addr:         ":" + port,
-		WriteTimeout: 5 * time.Second,
-		ReadTimeout:  25 * time.Second,
+		WriteTimeout: 50 * time.Second,
+		ReadTimeout:  50 * time.Second,
 	}
 
 	ln, err := httputil.LimitListener(srv.Addr)
