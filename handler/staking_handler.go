@@ -68,7 +68,7 @@ func MemberValidators(w http.ResponseWriter, r *http.Request) {
 					Annual: 0.0,
 				},
 				LockTime:      259200,
-				MinimumAmount: "1200000",
+				MinimumAmount: "100000000000000000000",
 			},
 		}
 		validatePage = append(validatePage, item)
@@ -189,7 +189,7 @@ func MemberDelegations(w http.ResponseWriter, r *http.Request) {
 								Annual: 0.0,
 							},
 							LockTime:      259200,
-							MinimumAmount: "1200000",
+							MinimumAmount: "100000000000000000000",
 						},
 					},
 					Value:  pygg.StakedAmount.String(),
