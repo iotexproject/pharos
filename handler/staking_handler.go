@@ -36,8 +36,14 @@ type pygg struct {
 }
 
 func getMemberDelegates() (*MemberDelegates, error) {
-	resp, err := http.Post(MemberGateway, "application/json", strings.NewReader(MemberAllCandidatesQuery))
+	req, err := http.NewRequest("POST", MemberGateway, strings.NewReader(MemberAllCandidatesQuery))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("content-type", "application/json")
+	req.Header.Add("x-iotex-client-id", "web-iopay-home")
 
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
