@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"math/big"
@@ -11,7 +12,6 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/gorilla/mux"
 	"github.com/iotexproject/iotex-address/address"
-	"github.com/iotexproject/iotex-antenna-go/rpcmethod"
 	"github.com/iotexproject/iotex-proto/golang/iotexapi"
 	"github.com/iotexproject/iotex-proto/golang/iotextypes"
 )
@@ -111,13 +111,15 @@ func MemberDelegations(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// connect to gRPC endpoint
-	svr, err := rpcmethod.NewRPCMethod(endpoint, enableTLS)
+	conn, err := GrpcConnection()
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
 	}
-	defer svr.Close()
-	res, err := svr.ReadContract(&iotexapi.ReadContractRequest{
+	defer conn.Close()
+
+	cli := iotexapi.NewAPIServiceClient(conn)
+	res, err := cli.ReadContract(context.Background(), &iotexapi.ReadContractRequest{
 		Execution: &iotextypes.Execution{
 			Amount:   "0",
 			Contract: StakingContract,
@@ -142,7 +144,7 @@ func MemberDelegations(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(err.Error()))
 			return
 		}
-		res, err = svr.ReadContract(&iotexapi.ReadContractRequest{
+		res, err = cli.ReadContract(context.Background(), &iotexapi.ReadContractRequest{
 			Execution: &iotextypes.Execution{
 				Amount:   "0",
 				Contract: StakingContract,
