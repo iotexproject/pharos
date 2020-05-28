@@ -36,3 +36,11 @@ func GrpcConnection() (*grpc.ClientConn, error) {
 	}
 	return grpc.Dial(endpoint, grpc.WithInsecure())
 }
+
+func Endpoint() string {
+	return endpoint
+}
+
+func TLSEnabled() bool {
+	return enableTLS
+}

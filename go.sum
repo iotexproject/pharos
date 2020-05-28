@@ -55,8 +55,8 @@ github.com/iotexproject/iotex-address v0.1.0 h1:mzhWO/p2SW9dnEAKw0i/Hy+xDhKD5AfM
 github.com/iotexproject/iotex-address v0.1.0/go.mod h1:XX+4C9lYCSG0dt5kzinWbUs0Kq/5OL7Hnu2Stt+4q2E=
 github.com/iotexproject/iotex-core v0.5.1 h1:r+mY36yXLReR0GvEgQb06YLFri6amY6mCCb8En1L9Pc=
 github.com/iotexproject/iotex-core v0.5.1/go.mod h1:8nEaqyRRzZK6IAH8H/bB/hUCz2jpTsQ0DBuhSm+nBEk=
-github.com/iotexproject/iotex-proto v0.2.1-0.20190718191021-4318b809f352 h1:ruLQdW9QB79V38Zu3VOxbgXKexOsv25PRyZod9ThXwo=
-github.com/iotexproject/iotex-proto v0.2.1-0.20190718191021-4318b809f352/go.mod h1:962P5o0qlB5sqRT07TJBMX31i2u309kzDqqwCg+cGz0=
+github.com/iotexproject/iotex-proto v0.3.0 h1:xMfUTEEzARJAmev33hPqM7TtwgcMbu4pXEFzvvVQEoM=
+github.com/iotexproject/iotex-proto v0.3.0/go.mod h1:xKA4yUbg208k1j3+t10Pe7IzT6uHcP+/4rsDanF4Q58=
 github.com/jessevdk/go-flags v0.0.0-20141203071132-1679536dcc89/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
 github.com/jrick/logrotate v1.0.0/go.mod h1:LNinyqDIJnpAur+b8yyulnQw/wDuN1+BYKlTRt3OuAQ=
 github.com/kkdai/bstream v0.0.0-20161212061736-f391b8402d23/go.mod h1:J+Gs4SYgM6CZQHDETBtE9HaSEkGmuNXF86RwHhHUvq4=

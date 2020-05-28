@@ -15,12 +15,14 @@ import (
 
 func main() {
 	flag.Parse()
-	log.Println("======= starting pharos service")
-
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
 		port = "8192"
 	}
+	log.Println("======= starting pharos service")
+	log.Println("======= port:", port)
+	log.Println("======= TLS enabled:", handler.TLSEnabled())
+	log.Println("======= blockchain endpoint:", handler.Endpoint())
 
 	r := mux.NewRouter()
 
@@ -44,6 +46,10 @@ func main() {
 	staking := r.PathPrefix("/v1/staking").Subrouter()
 	staking.HandleFunc("/validators", handler.MemberValidators).Methods(http.MethodGet)
 	staking.HandleFunc("/delegations/{addr:[0-9ac-z]{41}}", handler.MemberDelegations).Methods(http.MethodGet)
+
+	votes := r.PathPrefix("/v1/votes").Subrouter()
+	votes.HandleFunc("/addr/{addr:[0-9ac-z]{41}}", handler.GrpcToHttpHandler(handler.GetVotesByAddr)).Methods(http.MethodGet)
+	votes.HandleFunc("/index/{index:[0-9]+}", handler.GrpcToHttpHandler(handler.GetVotesByIndex)).Methods(http.MethodGet)
 
 	srv := &http.Server{
 		Handler:      r,
