@@ -47,8 +47,8 @@ func Test_Pharos(t *testing.T) {
 	defer resp.Body.Close()
 	acts = &iotexapi.GetActionsResponse{}
 	require.NoError(jsonpb.Unmarshal(resp.Body, acts))
-	require.True(acts.Total >= 47)
-	actInfo = acts.ActionInfo[1]
+	require.EqualValues(2, acts.Total)
+	actInfo = acts.ActionInfo[0]
 	require.Equal("0f4e20bdc0e91e65242eb08c5475292962bf92d3d624b2bc5ae61cd6e73e8161", actInfo.ActHash)
 	require.Equal("a43825aa49a4a688f136f77bcdfcdb101d41a7c9886badff57ca5c0d605f3042", actInfo.BlkHash)
 	require.Equal("io17ch0jth3dxqa7w9vu05yu86mqh0n6502d92lmp", actInfo.Sender)
@@ -74,6 +74,5 @@ func Test_Pharos(t *testing.T) {
 	defer resp.Body.Close()
 	meta := &iotextypes.ChainMeta{}
 	require.NoError(jsonpb.Unmarshal(resp.Body, meta))
-	require.True(meta.Epoch.Num > 2433)
-	require.True(meta.Epoch.GravityChainStartHeight >= 8269100)
+	require.True(meta.Epoch.Num > 12433)
 }
