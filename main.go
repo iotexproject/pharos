@@ -25,7 +25,11 @@ func main() {
 	log.Println("======= blockchain endpoint:", handler.Endpoint())
 
 	r := mux.NewRouter()
-
+	r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("OK"))
+		w.WriteHeader(http.StatusOK)
+		return
+	})
 	account := r.PathPrefix("/v1/accounts").Subrouter()
 	account.HandleFunc("/{addr:[0-9ac-z]{41}}", handler.GrpcToHttpHandler(handler.GetAccount)).Methods(http.MethodGet)
 
