@@ -35,10 +35,10 @@ func GrpcToHttpHandler(fn func(*http.Request, iotexapi.APIServiceClient) (proto.
 
 func convertToJSON(pb proto.Message) string {
 	marshal := &jsonpb.Marshaler{
+		true,
 		false,
 		false,
 		"",
-		true,
 		nil,
 	}
 	str, err := marshal.MarshalToString(pb)
