@@ -1,4 +1,4 @@
-package handler
+package staking_v1
 
 import (
 	"context"
@@ -14,6 +14,8 @@ import (
 	"github.com/iotexproject/iotex-address/address"
 	"github.com/iotexproject/iotex-proto/golang/iotexapi"
 	"github.com/iotexproject/iotex-proto/golang/iotextypes"
+
+	"github.com/iotexproject/pharos/handler"
 )
 
 const (
@@ -111,7 +113,7 @@ func MemberDelegations(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// connect to gRPC endpoint
-	conn, err := GrpcConnection()
+	conn, err := handler.GrpcConnection()
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return

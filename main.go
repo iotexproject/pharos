@@ -11,6 +11,7 @@ import (
 	"github.com/iotexproject/go-pkgs/util/httputil"
 
 	"github.com/iotexproject/pharos/handler"
+	"github.com/iotexproject/pharos/staking_v1"
 )
 
 func main() {
@@ -55,8 +56,8 @@ func main() {
 	meta.HandleFunc("", handler.GrpcToHttpHandler(handler.GetChainMeta)).Methods(http.MethodGet)
 
 	staking := r.PathPrefix("/v1/staking").Subrouter()
-	staking.HandleFunc("/validators", handler.MemberValidators).Methods(http.MethodGet)
-	staking.HandleFunc("/delegations/{addr:[0-9ac-z]{41}}", handler.MemberDelegations).Methods(http.MethodGet)
+	staking.HandleFunc("/validators", staking_v1.MemberValidators).Methods(http.MethodGet)
+	staking.HandleFunc("/delegations/{addr:[0-9ac-z]{41}}", staking_v1.MemberDelegations).Methods(http.MethodGet)
 
 	votes := r.PathPrefix("/v1/votes").Subrouter()
 	votes.HandleFunc("/addr/{addr:[0-9ac-z]{41}}", handler.GrpcToHttpHandler(handler.GetVotesByAddr)).Methods(http.MethodGet)

@@ -1,4 +1,4 @@
-package handler
+package staking_v1
 
 const (
 	DelegationStatusActive  DelegationStatus = "active"
