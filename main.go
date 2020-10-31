@@ -29,12 +29,10 @@ func main() {
 
 	r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("OK"))
-		w.WriteHeader(http.StatusOK)
 		return
 	})
 	r.HandleFunc("/v1/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("OK"))
-		w.WriteHeader(http.StatusOK)
 		return
 	})
 
@@ -62,6 +60,10 @@ func main() {
 	votes := r.PathPrefix("/v1/votes").Subrouter()
 	votes.HandleFunc("/addr/{addr:[0-9ac-z]{41}}", handler.GrpcToHttpHandler(handler.GetVotesByAddr)).Methods(http.MethodGet)
 	votes.HandleFunc("/index/{index:[0-9]+}", handler.GrpcToHttpHandler(handler.GetVotesByIndex)).Methods(http.MethodGet)
+
+	contract := r.PathPrefix("/v1/contract").Subrouter()
+	contract.HandleFunc("/addr/{addr:[0-9ac-z]{41}}", handler.GrpcToHttpHandler(handler.ReadContract)).Methods(http.MethodGet).
+		Queries("method", "{method:[0-9a-fA-F]{8}}", "data", "{data:[0-9a-fA-F]+}")
 
 	srv := &http.Server{
 		Handler:      r,
