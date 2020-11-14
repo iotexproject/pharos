@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/hex"
 	"net/http"
 	"testing"
 
@@ -40,6 +41,20 @@ func Test_Pharos(t *testing.T) {
 	require.Equal("io1e2nqsyt7fkpzs5x7zf2uk0jj72teu5n6aku3tr", actInfo.Sender)
 	require.Equal("10000000000000000", actInfo.GasFee)
 	require.EqualValues(1558135580, actInfo.Timestamp.Seconds)
+
+	resp, err = http.DefaultClient.Get(baseURL + "/receipts/hash/" + hash)
+	require.NoError(err)
+	require.NotNil(resp.Body)
+	defer resp.Body.Close()
+	rec := &iotexapi.GetReceiptByActionResponse{}
+	require.NoError(jsonpb.Unmarshal(resp.Body, rec))
+	recInfo := rec.ReceiptInfo.Receipt
+	require.EqualValues(1, recInfo.Status)
+	require.EqualValues(222656, recInfo.BlkHeight)
+	require.Equal(hash, hex.EncodeToString(recInfo.ActHash))
+	require.EqualValues(10000, recInfo.GasConsumed)
+	require.Equal("io1enfa3p3aysdueq85vvprzzndjs4fp6z32hf7xs", recInfo.ContractAddress)
+	require.Equal("33e1d2858cec24059f22348b862a2f415a21bb14b7d96733249a12e96c542969", rec.ReceiptInfo.BlkHash)
 
 	resp, err = http.DefaultClient.Get(baseURL + "/actions/addr/io1e2nqsyt7fkpzs5x7zf2uk0jj72teu5n6aku3tr?count=2&start=0")
 	require.NoError(err)

@@ -27,7 +27,7 @@ The URL is https://pharos.iotex.io/v1/receipts/hash/_hash
 
 Here's an example: https://pharos.iotex.io/v1/receipts/hash/53e729d28b0c69fc66c4317fdc6ee7af292980ce781b56b502e2ee2e0b9ca48a
 
-``
+`{"receiptInfo":{"receipt":{"status":"1","blkHeight":"222656","actHash":"U+cp0osMafxmxDF/3G7nrykpgM54G1a1AuLuLgucpIo=","gasConsumed":"10000","contractAddress":"io1enfa3p3aysdueq85vvprzzndjs4fp6z32hf7xs"},"blkHash":"33e1d2858cec24059f22348b862a2f415a21bb14b7d96733249a12e96c542969"}}`
 
 ## Transfer in block
 The URL is https://pharos.iotex.io/v1/transfers/block/_blocknum
