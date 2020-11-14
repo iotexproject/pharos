@@ -44,6 +44,9 @@ func main() {
 	action.HandleFunc("/addr/{addr:[0-9ac-z]{41}}", handler.GrpcToHttpHandler(handler.GetActionByAddr)).Methods(http.MethodGet).
 		Queries("start", "{start:[0-9]+}", "count", "{count:[0-9]+}")
 
+	receipt := r.PathPrefix("/v1/receipts").Subrouter()
+	receipt.HandleFunc("/hash/{hash:[0-9a-fA-F]{64}}", handler.GrpcToHttpHandler(handler.GetReceiptByHash)).Methods(http.MethodGet)
+
 	send := r.PathPrefix("/v1/actionbytes").Subrouter()
 	send.HandleFunc("/{signedbytes:[0-9a-fA-F]+}", handler.GrpcToHttpHandler(handler.SendSignedActionBytes)).Methods(http.MethodPost)
 

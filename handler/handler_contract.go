@@ -26,9 +26,9 @@ func ReadContract(r *http.Request, cli iotexapi.APIServiceClient) (proto.Message
 
 	req := &iotexapi.ReadContractRequest{
 		Execution: &iotextypes.Execution{
-			Amount: "0",
+			Amount:   "0",
 			Contract: vars["addr"],
-			Data: append(method, data...),
+			Data:     append(method, data...),
 		},
 		CallerAddress: "io1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqd39ym7",
 	}

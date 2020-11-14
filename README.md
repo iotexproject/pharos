@@ -22,6 +22,13 @@ Here's an example: https://pharos.iotex.io/v1/actions/addr/io1e2nqsyt7fkpzs5x7zf
 
 `{"total":"2","actionInfo":[{"action":{"core":{"version":1,"nonce":"135","gasLimit":"200000","gasPrice":"2000000000000","transfer":{"amount":"18000000000000000000","recipient":"io1e2nqsyt7fkpzs5x7zf2uk0jj72teu5n6aku3tr"}},"senderPubKey":"BMG9A8WXR3flEqOP8gN+qJdyrIHe5tIEr8be5grHMjihJ/3zg719Yzh+xeIhAmsrMU0wSc8wRSjVSOqSbqioNMI=","signature":"ToTUr+uOjflIIUagaEEW7HccSt8+UJmXqbrGK2kr8vxyHbuRTjBcq/b0KrnF8JcztqDkQ+ohjJqtdXpJQH2PUAE="},"actHash":"0f4e20bdc0e91e65242eb08c5475292962bf92d3d624b2bc5ae61cd6e73e8161","blkHash":"a43825aa49a4a688f136f77bcdfcdb101d41a7c9886badff57ca5c0d605f3042","blkHeight":"216825","sender":"io17ch0jth3dxqa7w9vu05yu86mqh0n6502d92lmp","gasFee":"20000000000000000","timestamp":"2019-05-17T07:14:10Z"},{"action":{"core":{"version":1,"nonce":"1","gasLimit":"20000","gasPrice":"1000000000000","transfer":{"amount":"1000000000000000","recipient":"io1e2nqsyt7fkpzs5x7zf2uk0jj72teu5n6aku3tr"}},"senderPubKey":"BLhgbOGdny7iNzyHe9axp5KWTb8sMJzad78+bc5cTYRAUqVNF6igy5t9z2jqM2Zneiw17d6xSgbokcDnVRxmuM8=","signature":"awRLFCvU4X5SVyz2IDU5rdjmKjUk3BOchmt/3bmvgi9GJJW3pat4I0i/qqROowPbVJ8nj+eZNQ5Okhgt6ezPgAE="},"actHash":"53e729d28b0c69fc66c4317fdc6ee7af292980ce781b56b502e2ee2e0b9ca48a","blkHash":"33e1d2858cec24059f22348b862a2f415a21bb14b7d96733249a12e96c542969","blkHeight":"222656","sender":"io1e2nqsyt7fkpzs5x7zf2uk0jj72teu5n6aku3tr","gasFee":"10000000000000000","timestamp":"2019-05-17T23:26:20Z"}]}`
 
+## Receipt by hash
+The URL is https://pharos.iotex.io/v1/receipts/hash/_hash
+
+Here's an example: https://pharos.iotex.io/v1/receipts/hash/53e729d28b0c69fc66c4317fdc6ee7af292980ce781b56b502e2ee2e0b9ca48a
+
+``
+
 ## Transfer in block
 The URL is https://pharos.iotex.io/v1/transfers/block/_blocknum
 
@@ -47,3 +54,10 @@ The URL is https://pharos.iotex.io/v1/votes/index/_index
 Here's an example: https://pharos.iotex.io/v1/votes/index/47
 
 `{"candidateAddress":"io1t56twy23yjuqscljpjc869hyqw3gpswwj0g228","stakedAmount":"2000000000000000000000000","stakedDuration":7,"createTime":"2020-05-07T19:00:20Z","stakeStartTime":"2020-05-07T19:00:20Z","unstakeStartTime":"1970-01-01T00:00:00Z","autoStake":true,"owner":"io1t56twy23yjuqscljpjc869hyqw3gpswwj0g228"}`
+
+## Read contract data
+The URL is https://pharos.iotex.io/v1/contract/addr/_addr?method=_method&data=_data
+
+Here's an example: https://pharos.iotex.io/v1/contract/addr/io1a8qeke954ncyddc0ek3vlq5xpz54f0l7lyx8wg?method=c5934222&data=0000000000000000000000000000000000333532363536313033333830393633
+
+`{"data":"00000000000000000000000000000000000000000000000000000000007a08e40000000000000000000000000000000000000000000000000000000000000078000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000000000000000000000000000000000000000003d6563322d35322d38332d32342d3132302e636e2d6e6f727468776573742d312e636f6d707574652e616d617a6f6e6177732e636f6d2e636e3a3138383400000000000000000000000000000000000000000000000000000000000000000000066162636465660000000000000000000000000000000000000000000000000000"}`
