@@ -14,6 +14,7 @@ import (
 	"github.com/iotexproject/iotex-address/address"
 	"github.com/iotexproject/iotex-proto/golang/iotexapi"
 	"github.com/iotexproject/iotex-proto/golang/iotextypes"
+	"github.com/pkg/errors"
 
 	"github.com/iotexproject/pharos/handler"
 )
@@ -23,6 +24,8 @@ const (
 	MemberGateway            = "https://member.iotex.io/api-gateway/"
 	MemberAllCandidatesQuery = `{"operationName":"bpCandidates","variables":{},"query":"query bpCandidates {bpCandidates {id rank logo name status category serverStatus liveVotes liveVotesDelta percent registeredName socialMedia productivity productivityBase __typename}}"}`
 )
+
+var errWrongData = errors.New("wrong data returned by ABI unpack")
 
 type pygg struct {
 	CanName          [12]byte
@@ -133,10 +136,14 @@ func MemberDelegations(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(err.Error()))
 		return
 	}
-	var indexes []*big.Int
-	err = abi.Unpack(&indexes, "getPyggIndexesByAddress", common.Hex2Bytes(res.Data))
+	v, err := abi.Unpack("getPyggIndexesByAddress", common.Hex2Bytes(res.Data))
 	if err != nil {
 		w.Write([]byte(err.Error()))
+		return
+	}
+	indexes, ok := v[0].([]*big.Int)
+	if !ok {
+		w.Write([]byte(errWrongData.Error()))
 		return
 	}
 	var pyggs []pygg
@@ -158,9 +165,12 @@ func MemberDelegations(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(err.Error()))
 			return
 		}
-
-		var pygg pygg
-		err = abi.Unpack(&pygg, "pyggs", common.Hex2Bytes(res.Data))
+		u, err := abi.Unpack("pyggs", common.Hex2Bytes(res.Data))
+		if err != nil {
+			w.Write([]byte(err.Error()))
+			return
+		}
+		pygg, err := toPgyy(u)
 		if err != nil {
 			w.Write([]byte(err.Error()))
 			return
@@ -216,4 +226,56 @@ func MemberDelegations(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Write(body)
+}
+
+func toPgyy(v []interface{}) (pygg, error) {
+	var (
+		pygg pygg
+		ok   bool
+	)
+	// struct pygg has 10 fields
+	if len(v) != 10 {
+		return pygg, errWrongData
+	}
+	pygg.CanName, ok = v[0].([12]byte)
+	if !ok {
+		return pygg, errWrongData
+	}
+	pygg.StakedAmount, ok = v[1].(*big.Int)
+	if !ok {
+		return pygg, errWrongData
+	}
+	pygg.StakeDuration, ok = v[2].(*big.Int)
+	if !ok {
+		return pygg, errWrongData
+	}
+	pygg.StakeStartTime, ok = v[3].(*big.Int)
+	if !ok {
+		return pygg, errWrongData
+	}
+	pygg.NonDecay, ok = v[4].(bool)
+	if !ok {
+		return pygg, errWrongData
+	}
+	pygg.UnstakeStartTime, ok = v[5].(*big.Int)
+	if !ok {
+		return pygg, errWrongData
+	}
+	pygg.PyggOwner, ok = v[6].(common.Address)
+	if !ok {
+		return pygg, errWrongData
+	}
+	pygg.CreateTime, ok = v[7].(*big.Int)
+	if !ok {
+		return pygg, errWrongData
+	}
+	pygg.Prev, ok = v[8].(*big.Int)
+	if !ok {
+		return pygg, errWrongData
+	}
+	pygg.Next, ok = v[9].(*big.Int)
+	if !ok {
+		return pygg, errWrongData
+	}
+	return pygg, nil
 }

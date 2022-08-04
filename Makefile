@@ -18,6 +18,7 @@ BUILD_TARGET=pharos
 
 .PHONY: fmt
 fmt:
+	$(GOCMD) mod tidy
 	$(GOCMD) fmt ./...
 
 .PHONY: test
